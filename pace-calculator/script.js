@@ -120,4 +120,60 @@ document.addEventListener('DOMContentLoaded', () => {
     function convertKmToMiles(km) {
         return km / 1.60934;
     }
+
+    function handleTimeInputChange(event) {
+        const input = event.target;
+        let value = parseInt(input.value, 10);
+
+        if (input.id === 'seconds' || input.id === 'minutes') {
+            if (value >= 60) {
+                value = 0;
+                if (input.id === 'seconds') {
+                    incrementInputValue('minutes');
+                } else {
+                    incrementInputValue('hours');
+                }
+            } else if (value < 0) {
+                value = 59;
+                if (input.id === 'seconds') {
+                    decrementInputValue('minutes');
+                } else {
+                    decrementInputValue('hours');
+                }
+            }
+        } else if (input.id === 'hours' && value < 0) {
+            value = 0;
+        }
+
+        input.value = value;
+    }
+
+    function incrementInputValue(inputId) {
+        const input = document.getElementById(inputId);
+        let value = parseInt(input.value, 10) || 0;
+        value += 1;
+        input.value = value;
+    }
+
+    function decrementInputValue(inputId) {
+        const input = document.getElementById(inputId);
+        let value = parseInt(input.value, 10) || 0;
+        if (value > 0) {
+            value -= 1;
+        }
+        input.value = value;
+    }
+
+    [hoursInput, minutesInput, secondsInput].forEach(input => {
+        input.addEventListener('change', handleTimeInputChange);
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                incrementInputValue(input.id);
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                decrementInputValue(input.id);
+            }
+        });
+    });
 });
