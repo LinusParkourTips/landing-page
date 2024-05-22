@@ -145,14 +145,22 @@ document.addEventListener('DOMContentLoaded', () => {
             value = 0;
         }
 
-        input.value = value;
+        input.value = pad(value);
     }
 
     function incrementInputValue(inputId) {
         const input = document.getElementById(inputId);
         let value = parseInt(input.value, 10) || 0;
         value += 1;
-        input.value = value;
+        input.value = pad(value);
+        if (input.id === 'seconds' && value >= 60) {
+            input.value = '00';
+            incrementInputValue('minutes');
+        }
+        if (input.id === 'minutes' && value >= 60) {
+            input.value = '00';
+            incrementInputValue('hours');
+        }
     }
 
     function decrementInputValue(inputId) {
@@ -160,8 +168,15 @@ document.addEventListener('DOMContentLoaded', () => {
         let value = parseInt(input.value, 10) || 0;
         if (value > 0) {
             value -= 1;
+        } else if (input.id === 'seconds' || input.id === 'minutes') {
+            value = 59;
+            if (input.id === 'seconds') {
+                decrementInputValue('minutes');
+            } else {
+                decrementInputValue('hours');
+            }
         }
-        input.value = value;
+        input.value = pad(value);
     }
 
     [hoursInput, minutesInput, secondsInput].forEach(input => {
