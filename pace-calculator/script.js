@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function formatPace(seconds) {
         const { minutes, seconds: remainingSeconds } = secondsToHMS(seconds);
         const roundedSeconds = remainingSeconds.toFixed(2);
-        const secondsString = roundedSeconds === '0.00' ? '00' : pad(roundedSeconds);
+        const secondsString = roundedSeconds === '0.00' ? '00' : pad(Math.floor(roundedSeconds));
         return `${pad(minutes)}:${secondsString}`;
     }
 
